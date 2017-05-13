@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans        
+    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd        
+    http://code.alibabatech.com/schema/dubbo        
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<!-- client config-->
+	<dubbo:application name="consumer-of-openAPI"/>
+
+	<dubbo:registry id="serviceClientRegistry"
+					protocol="${dubbo.registry.name}"
+					client="${dubbo.registry.client}"
+					address="${dubbo.registry.address}"
+					group="${dubbo.registry.group}"
+					check="${dubbo.consumer.check}"
+					subscribe="true" file="registry-cache.properties">
+	</dubbo:registry>
+
+	<dubbo:consumer id="serviceConsumer"
+					registry="serviceClientRegistry"
+					init="false"
+					check="${dubbo.consumer.check}"
+					timeout="${dubbo.consumer.timeout}"
+					retries="0"/>
+</beans>
