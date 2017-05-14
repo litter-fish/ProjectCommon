@@ -33,16 +33,16 @@
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>
-        <!--<plugins>
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                   &lt;!&ndash; <warName>${project.artifactId}</warName>&ndash;&gt;
+                    <warName>${project.artifactId}</warName>
                 </configuration>
             </plugin>
 
-            &lt;!&ndash; jetty server config &ndash;&gt;
+            <!-- jetty server config -->
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
@@ -56,11 +56,11 @@
                         <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
                             <port>8080</port>
                         </connector>
-                        &lt;!&ndash;  7之前的版本
+                        <!--  7之前的版本
                         <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
                             <port>8088</port>
                         </connector>
-                        &ndash;&gt;
+                        -->
                     </connectors>
                     <stopKey>foo</stopKey>
                     <stopPort>20000</stopPort>
@@ -74,10 +74,10 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
-        </plugins>-->
+        </plugins>
         <!-- 主资源目录 -->
-      <!--  <resources>
-            &lt;!&ndash; 只过滤 properties、xml文件  不过滤 excel文件 &ndash;&gt;
+        <resources>
+            <!-- 只过滤 properties、xml文件  不过滤 excel文件 -->
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
@@ -93,7 +93,7 @@
                     <include>docs/*</include>
                 </includes>
             </resource>
-        </resources>-->
+        </resources>
     </build>
 
     <properties>

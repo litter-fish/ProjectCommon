@@ -15,6 +15,6 @@
 
     <dubbo:reference id="demoService" interface="com.fish.service.IDemoService" version="1.0.0" check="false" />
 
-
+    <dubbo:reference id="callbackService" interface="com.fish.service.ICallbackService" />
 
 </beans>
