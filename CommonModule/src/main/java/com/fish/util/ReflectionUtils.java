@@ -1,12 +1,14 @@
 package com.fish.util;
 
-import org.apache.log4j.Logger;
+import com.alibaba.fastjson.JSONObject;
+import com.fish.annotation.Alias;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * 反射工具类
@@ -14,7 +16,7 @@ import java.util.List;
 public class ReflectionUtils {
 
 
-	private final static Logger log = Logger.getLogger(ReflectionUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(ReflectionUtils.class);
 
 	/**
 	 * 通过反射创建类构造方法
@@ -531,6 +533,188 @@ public class ReflectionUtils {
 				|| clazz.equals(Character.class) || clazz.equals(Short.class)
 				|| clazz.equals(Boolean.class) || clazz.equals(BigDecimal.class) || clazz.isPrimitive());
 	}
+
+
+	public final static <T> T jsonToObject(String json, T t) {
+
+		if (null == json || null == t) return null;
+
+		JSONObject jsonObject = JSONObject.parseObject(json);
+
+		Field[] fields = getAllDeclaredField(t);
+		for (Field field : fields) {
+			String fieldName = field.getName();
+			if(isSerialVersionUID(fieldName)) continue;
+			Object value = jsonObject.get(fieldName);
+			if (null == value ) continue;
+			try {
+				field.setAccessible(true);
+				field.set(t, value);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return t;
+	}
+
+	public final static <T> T jsonToObject(JSONObject json, Class<T> clazz) {
+
+		if (null == clazz) return null;
+		T instancece = null;
+		try {
+			instancece = clazz.newInstance();
+
+			if (null == json) return instancece;
+
+			for (Map.Entry<String, Object> entry : json.entrySet()) {
+				String[] keys = entry.getKey().split("_");
+
+				StringBuilder setter = new StringBuilder("set");
+				for (String key : keys) {
+					setter.append(key.substring(0, 1).toUpperCase()).append(key.substring(1));
+				}
+
+				Method setterMethod = clazz.getMethod(setter.toString(), new Class[]{String.class});
+				setterMethod.setAccessible(true);
+				setterMethod.invoke(instancece, new Object[]{entry.getValue().toString()});
+			}
+
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			return null;
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
+
+		return instancece;
+	}
+
+	public static final <T> String objectToJson(T t) {
+		return JSONObject.toJSONString(t);
+	}
+
+	public static <T> void clone(T sourceObj, T destObj, boolean alias){
+		if(null== sourceObj || null == destObj){
+			return;
+		}
+		Field[] fields = getAllDeclaredField(sourceObj.getClass());
+		Object value = null;
+		for (Field field : fields) {
+			try {
+				String filedName = field.getName();
+				if(isSerialVersionUID(filedName)) continue;
+
+				Class<?> filedType = field.getType();
+
+				if(alias){
+					Alias al = field.getAnnotation(Alias.class);
+					if(null != al){
+						filedName = al.value();
+						if(StringUtils.isNotBlank(al.type())) {
+							filedType = Class.forName(al.type());
+						}
+					}
+				}
+				if(!isFieldName(destObj.getClass(), filedName)){
+					continue;
+				}
+				value = getFieldValue(sourceObj, field.getName());
+				if(null == value){
+					continue;
+				}
+				setObjValueByField(destObj, filedType,filedName,value);
+			} catch (Exception e) {
+				log.warn("字段{}不存在,e:{}",field.getName(),e);
+			}
+		}
+	}
+
+
+	/**
+	 *
+	 * isFieldName(指定对象，判断该对象的属性是否存在，包含检测其父类)
+	 * @param clazz clazz
+	 * @param filedname 对象的属性名
+	 * @return
+	 * @throws Exception
+	 * Boolean
+	 * @exception
+	 */
+	public static Boolean isFieldName(Class<?> clazz ,String filedname) throws Exception{
+		Field[] fields=clazz.getDeclaredFields();
+		/**
+		 * 循环遍历所有的元素，检测有没有这个名字
+		 */
+		boolean b=false;
+		for (int i = 0; i < fields.length; i++) {
+			if(fields[i].getName().equals(filedname)){
+				return true;
+			}
+		}
+		if ( clazz.getSuperclass ( ) != null){
+			return ReflectionUtils.isFieldName(clazz.getSuperclass(), filedname);
+		}
+		return b;
+	}
+
+	/**
+	 * 根据属性,给对象赋值
+	 * @param name
+	 * @return
+	 */
+	public static Object setObjValueByField(Object bean,Class<?> filedType ,String name, Object value) {
+		Object result = null;
+		try {
+			String stringLetter = name.substring(0, 1).toUpperCase();
+			String setName = "set" + stringLetter + name.substring(1);
+			Method method = bean.getClass().getMethod(setName, filedType);
+			String filedTypeName = filedType.getName();
+			if (method != null) {
+				if (value.getClass().getName().equals("org.json.JSONObject$Null")) {
+				} else if (filedTypeName.equals(String.class.getName())) {
+					method.invoke(bean, value.toString());
+				} else if (filedTypeName.equals(int.class.getName()) || filedTypeName.equals(Integer.class.getName())) {
+					method.invoke(bean, Integer.parseInt(StringUtils.isEmpty(value.toString()) ? "0" : value.toString()));
+				} else if (filedTypeName.equals(float.class.getName()) || filedTypeName.equals(Float.class.getName())) {
+					method.invoke(bean, Float.parseFloat(StringUtils.isEmpty(value.toString()) ? "0" : value.toString()));
+				} else if (filedTypeName.equals(double.class.getName()) || filedTypeName.equals(Double.class.getName())) {
+					method.invoke(bean, Double.parseDouble(StringUtils.isEmpty(value.toString()) ? "0" : value.toString()));
+				} else if (filedTypeName.equals(long.class.getName()) || filedTypeName.equals(Long.class.getName())) {
+					method.invoke(bean, Long.parseLong(StringUtils.isEmpty(value.toString()) ? "0" : value.toString()));
+				} else if (filedTypeName.equals(Date.class.getName())) {
+					if(value != null && value instanceof Long) {
+						method.invoke(bean, new Date(((Long) value).longValue()));
+					}else if(value instanceof Date){
+						method.invoke(bean, value);
+					}
+				} else if (filedTypeName.equals(BigDecimal.class.getName())) {
+					method.invoke(bean, StringUtils.isEmpty(value.toString()) ? null : BigDecimal.valueOf(Double.parseDouble(value.toString())));
+				} else {
+					method.invoke(bean, value);
+				}
+			}
+			return bean;
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 
 
 
