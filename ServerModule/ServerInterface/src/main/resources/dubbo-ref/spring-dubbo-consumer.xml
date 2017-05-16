@@ -17,4 +17,7 @@
 
     <dubbo:reference id="callbackService" interface="com.fish.service.ICallbackService" />
 
+
+    <dubbo:reference id="cacheService" interface="com.fish.service.ICacheService" cache="true" />
+
 </beans>

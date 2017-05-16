@@ -32,7 +32,7 @@
 
     <mappers>
         <!-- 添加mapper映射文件 -->
-      	<!--<mapper resource="mybatisConfig/mapper/base/AreasMapper.xml"/>-->
+      	<mapper resource="mybatisConfig/mapper/base/AreasMapper.xml"/>
     </mappers>
 
 </configuration> 

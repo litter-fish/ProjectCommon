@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+          http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+    <!-- 读库 -->
+    <bean id="maReadDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="${common.read.mysql.username}" />
+        <property name="password" value="${common.read.mysql.password}" />
+        <property name="driverClassName" value="${common.read.mysql.driver}" />
+        <property name="url" value="${common.read.mysql.url}" />
+        <property name="maxActive" value="${common.read.mysql.maxActive}"/>
+        <property name="initialSize" value="${common.read.mysql.initialSize}"/>
+        <property name="minIdle" value="${common.read.mysql.minIdle}"/>
+        <property name="validationQuery" value="${common.read.mysql.validationQuery}"/>
+        <property name="maxWait" value="${common.read.mysql.maxWait}"/>
+        <property name="minEvictableIdleTimeMillis" value="${common.read.mysql.minEvictableIdleTimeMillis}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${common.read.mysql.timeBetweenEvictionRunsMillis}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${common.read.mysql.maxPoolPreparedStatementPerConnectionSize}"/>
+        <property name="filters" value="${common.read.mysql.filters}"/>
+    </bean>
+
+    <bean name="mybatisReadSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="maReadDataSource"/>
+        <property name="configLocation" value="classpath:/mybatisConfig/mybatis-config.xml"/>
+        <!--<property name="typeHandlersPackage" value="com.hk.common.mybatis.typehandler"/>-->
+    </bean>
+    <bean name="myBatisReadTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="mybatisReadSqlSessionFactory"/>
+    </bean>
+    <bean name="mybatisReadTemplateBatch" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="mybatisReadSqlSessionFactory"/>
+        <constructor-arg value="BATCH"/>
+    </bean>
+
+    <bean name="commonReadDao" class="com.fish.dao.GenericMyBatisDao">
+        <property name="mybatisTemplate" ref="myBatisReadTemplate" />
+    </bean>
+
+    <bean name="commonBatchReadDao" class="com.fish.dao.GenericMyBatisDao">
+        <property name="mybatisTemplate" ref="mybatisReadTemplateBatch" />
+    </bean>
+
+
+    <!-- 写库 -->
+    <bean id="maWriteDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="${common.write.mysql.username}"/>
+        <property name="password" value="${common.write.mysql.password}"/>
+        <property name="driverClassName" value="${common.write.mysql.driver}"/>
+        <property name="url" value="${common.write.mysql.url}"/>
+        <property name="maxActive" value="${common.write.mysql.maxActive}"/>
+        <property name="initialSize" value="${common.write.mysql.initialSize}"/>
+        <property name="minIdle" value="${common.write.mysql.minIdle}"/>
+        <property name="validationQuery" value="${common.write.mysql.validationQuery}"/>
+        <property name="maxWait" value="${common.write.mysql.maxWait}"/>
+        <property name="minEvictableIdleTimeMillis" value="${common.write.mysql.minEvictableIdleTimeMillis}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${common.write.mysql.timeBetweenEvictionRunsMillis}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${common.write.mysql.maxPoolPreparedStatementPerConnectionSize}"/>
+        <property name="filters" value="${common.write.mysql.filters}"/>
+    </bean>
+
+    <bean name="mybatisWriteSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="maWriteDataSource"/>
+        <property name="configLocation" value="classpath:/mybatisConfig/mybatis-config.xml"/>
+        <!--<property name="typeHandlersPackage" value="com.hk.common.mybatis.typehandler"/>-->
+    </bean>
+    <bean name="myBatisWriteTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="mybatisWriteSqlSessionFactory"/>
+    </bean>
+    <bean name="mybatisWriteTemplateBatch" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="mybatisWriteSqlSessionFactory"/>
+        <constructor-arg value="BATCH"/>
+    </bean>
+
+    <bean name="commonWriteDao" class="com.fish.dao.GenericMyBatisDao">
+        <property name="mybatisTemplate" ref="myBatisWriteTemplate" />
+    </bean>
+
+    <bean name="commonBatchWriteDao" class="com.fish.dao.GenericMyBatisDao">
+        <property name="mybatisTemplate" ref="mybatisWriteTemplateBatch" />
+    </bean>
+
+
+    <!-- 事务管理器 -->
+    <bean name="commonWriteTransactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="maWriteDataSource"/>
+    </bean>
+
+    <!-- 事务管理器模板 -->
+    <bean name="commonWriteTransactionTemplate"
+          class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="commonWriteTransactionManager"/>
+    </bean>
+	 
+	<!--  注解方式配置事物 -->
+	<tx:annotation-driven transaction-manager="commonWriteTransactionManager"
+		proxy-target-class="true" />
+
+	<tx:advice id="txAdvice" transaction-manager="commonWriteTransactionManager">
+		<tx:attributes>
+			<tx:method name="add*" rollback-for="Exception" />
+			<tx:method name="delete*" rollback-for="Exception" />
+			<tx:method name="edit*" rollback-for="Exception" />
+			<tx:method name="save*" rollback-for="Exception"/>
+			<tx:method name="update*" rollback-for="Exception"/>
+			<tx:method name="send*" rollback-for="Exception" />
+			<tx:method name="batch*" rollback-for="Exception"/>
+			<tx:method name="revert*" rollback-for="Exception"/>
+			<tx:method name="modfiy*" rollback-for="Exception"/>
+			<tx:method name="activation*" rollback-for="Exception"/>
+			<tx:method name="get*"  read-only="true"/>
+			<tx:method name="query*"  read-only="true"/>
+			<tx:method name="select*" read-only="true"/>
+			<tx:method name="export*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:advisor advice-ref="txAdvice"
+			pointcut="execution(* com.fish.service..*.*(..))" />
+	</aop:config>
+    
+</beans>

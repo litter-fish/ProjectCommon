@@ -21,4 +21,8 @@
         </dubbo:method>
     </dubbo:service>
 
+    <bean id="cacheServiceLocal" class="com.fish.service.CacheServiceImpl" />
+
+    <dubbo:service interface="com.fish.service.ICacheService" ref="cacheServiceLocal" />
+
 </beans>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fish.entity.mysql.base.Areas" >
+  <resultMap id="BaseResultMap" type="com.fish.entity.mysql.base.Areas" >
+    <id column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="full_spelling" property="fullSpelling" jdbcType="VARCHAR" />
+    <result column="brief_spelling" property="briefSpelling" jdbcType="VARCHAR" />
+    <result column="area_level" property="areaLevel" jdbcType="TINYINT" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="is_hot" property="isHot" jdbcType="BIT" />
+    <result column="sequence" property="sequence" jdbcType="INTEGER" />
+    <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
+    <result column="create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user_id" property="updateUserId" jdbcType="VARCHAR" />
+    <result column="update_date_time" property="updateDateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    `area_id`, `area_code`, `area_name`, `full_spelling`, `brief_spelling`, `area_level`, 
+    `parent_id`, `description`, `is_hot`, `sequence`, `create_user_id`, `create_date_time`, 
+    `update_user_id`, `update_date_time`, `is_delete`
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from `base_areas`
+    where `area_id` = #{areaId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from `base_areas`
+    where `area_id` = #{areaId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.fish.entity.mysql.base.Areas" useGeneratedKeys="true" keyColumn="area_id" keyProperty="areaId" >
+    insert into `base_areas`
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="areaId != null" >
+        `area_id`,
+      </if>
+      <if test="areaCode != null" >
+        `area_code`,
+      </if>
+      <if test="areaName != null" >
+        `area_name`,
+      </if>
+      <if test="fullSpelling != null" >
+        `full_spelling`,
+      </if>
+      <if test="briefSpelling != null" >
+        `brief_spelling`,
+      </if>
+      <if test="areaLevel != null" >
+        `area_level`,
+      </if>
+      <if test="parentId != null" >
+        `parent_id`,
+      </if>
+      <if test="description != null" >
+        `description`,
+      </if>
+      <if test="isHot != null" >
+        `is_hot`,
+      </if>
+      <if test="sequence != null" >
+        `sequence`,
+      </if>
+      <if test="createUserId != null" >
+        `create_user_id`,
+      </if>
+      <if test="createDateTime != null" >
+        `create_date_time`,
+      </if>
+      <if test="updateUserId != null" >
+        `update_user_id`,
+      </if>
+      <if test="updateDateTime != null" >
+        `update_date_time`,
+      </if>
+      <if test="isDelete != null" >
+        `is_delete`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="areaId != null" >
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullSpelling != null" >
+        #{fullSpelling,jdbcType=VARCHAR},
+      </if>
+      <if test="briefSpelling != null" >
+        #{briefSpelling,jdbcType=VARCHAR},
+      </if>
+      <if test="areaLevel != null" >
+        #{areaLevel,jdbcType=TINYINT},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isHot != null" >
+        #{isHot,jdbcType=BIT},
+      </if>
+      <if test="sequence != null" >
+        #{sequence,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDateTime != null" >
+        #{createDateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserId != null" >
+        #{updateUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDateTime != null" >
+        #{updateDateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fish.entity.mysql.base.Areas" >
+    update `base_areas`
+    <set >
+      <if test="areaCode != null" >
+        `area_code` = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        `area_name` = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullSpelling != null" >
+        `full_spelling` = #{fullSpelling,jdbcType=VARCHAR},
+      </if>
+      <if test="briefSpelling != null" >
+        `brief_spelling` = #{briefSpelling,jdbcType=VARCHAR},
+      </if>
+      <if test="areaLevel != null" >
+        `area_level` = #{areaLevel,jdbcType=TINYINT},
+      </if>
+      <if test="parentId != null" >
+        `parent_id` = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        `description` = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isHot != null" >
+        `is_hot` = #{isHot,jdbcType=BIT},
+      </if>
+      <if test="sequence != null" >
+        `sequence` = #{sequence,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        `create_user_id` = #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDateTime != null" >
+        `create_date_time` = #{createDateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserId != null" >
+        `update_user_id` = #{updateUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDateTime != null" >
+        `update_date_time` = #{updateDateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        `is_delete` = #{isDelete,jdbcType=BIT},
+      </if>
+    </set>
+    where `area_id` = #{areaId,jdbcType=INTEGER}
+  </update>
+</mapper>

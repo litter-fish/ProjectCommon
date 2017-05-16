@@ -1,5 +1,8 @@
 package com.fish.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -11,7 +14,9 @@ import java.security.NoSuchAlgorithmException;
 /**
  *
  */
-public class Md5Utils {
+public class EncrypUtils {
+
+	private static final Logger logger = LoggerFactory.getLogger(EncrypUtils.class);
 
 	private static final String ALGORIGTHM_MD5 = "MD5";
 	private static final int CACHE_SIZE = 2048;
@@ -140,7 +145,6 @@ public class Md5Utils {
 	 */
 	private static String byteArrayToHexString(byte[] data) {
 		// 用来将字节转换成 16 进制表示的字符
-		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 		// 每个字节用 16 进制表示的话，使用两个字符，所以表示成 16 进制需要 32 个字符
 		char arr[] = new char[16 * 2];
 		int k = 0; // 表示转换结果中对应的字符位置
@@ -148,9 +152,9 @@ public class Md5Utils {
 		for (int i = 0; i < 16; i++) {
 			byte b = data[i]; // 取第 i 个字节
 			// 取字节中高 4 位的数字转换, >>>为逻辑右移，将符号位一起右移
-			arr[k++] = hexDigits[b >>> 4 & 0xf];
+			arr[k++] = hexChar[b >>> 4 & 0xf];
 			// 取字节中低 4 位的数字转换
-			arr[k++] = hexDigits[b & 0xf];
+			arr[k++] = hexChar[b & 0xf];
 		}
 		// 换后的结果转换为字符串
 		return new String(arr);
@@ -167,4 +171,39 @@ public class Md5Utils {
 	private static MessageDigest getMD5() throws NoSuchAlgorithmException {
 		return MessageDigest.getInstance(ALGORIGTHM_MD5);
 	}
+
+
+	public static final char[] hexChar = {
+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+	public static String sha(String fileName) {
+
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("SHA1");
+		} catch (NoSuchAlgorithmException e) {
+			logger.error("加密失败:{}", e.getMessage());
+			return fileName;
+		}
+		md.update(fileName.getBytes());
+
+		return byteArrayToHexString(md.digest());
+	}
+
+
+	/**
+	 * @param args
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static void main(String[] args) throws NoSuchAlgorithmException {
+		String msg = "685293208762060802_oJ1w_vyBzrxb9hwaJk8EciH7jWTk";
+		EncrypUtils sha = new EncrypUtils();
+		try {
+			sha.sha(msg);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
 }

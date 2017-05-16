@@ -50,6 +50,7 @@
     <version.jackson-databind>2.5.3</version.jackson-databind>
     <version.qrcode>v1.0.1</version.qrcode>
     <version.zkclient>0.1</version.zkclient>
+    <version.druid>1.0.28</version.druid>
 
   </properties>
 
@@ -223,6 +224,13 @@
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
       <version>${version.fastjson}</version>
+    </dependency>
+
+    <!-- database pool -->
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>druid</artifactId>
+      <version>${version.druid}</version>
     </dependency>
 
 

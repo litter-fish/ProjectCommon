@@ -31,11 +31,6 @@ public enum ResultCode {
     LOGIN_INVALID_VERICODE_NULL(10002, "图片验证码不能为空"),
     LOGIN_INVALID_VERICODE_ERROR(10003, "图片验证码输入错误"),
 
-
-    /**
-     * 期望就诊开始日期的前%s天的%s时后 不允许下单
-     */
-    VIP_CAN_NOT_ORDER(40001, "期望就诊开始日期的前%s天的%s时后 不允许下单"),
     /**
      * 订单已经取消
      */
@@ -44,39 +39,6 @@ public enum ResultCode {
      * 当前状态不能取消
      */
     VIP_NOT_CANCEL(40003, "订单当前状态不允许取消"),
-    /**
-     * 陪诊服务已开始，不允许取消订单
-     */
-    VIP_NOT_CANCEL_BY_STARTED(40004, "陪诊服务已开始，不允许取消订单"),
-    /**
-     * 陪诊服务已开始，不允许取消订单
-     */
-    VIP_NOT_CANCEL_BY_END(40006, "陪诊服务已结束，不允许取消订单"),
-    /**
-     * VIP就诊日期开始前 {days}天的{hour}时 或者 开始陪诊服务后不允许取消订单
-     */
-    VIP_NOT_CANCEL_BY_STARTTIME(40005, "VIP就诊日期开始前%s天的%s时后不允许取消订单"),
-    //C端提示
-    VIP_ORDER_CANT_NOT_ORDER(40021, "VIP陪诊服务前%s天的%s时后 不允许下单"),
-
-    /**
-     * 无忧就诊日期开始前 {days}天的{hour}时 或者 开始陪诊服务后不允许取消订单
-     */
-    ACCOMPANY_NOT_CANCEL_BY_STARTTIME(50001, "无忧就诊日期开始前%s天的%s时后不允许取消订单"),
-    ACCOMPANY_CANT_NOT_ORDER(50002, "就诊日期前%s天的%s时后 不允许下单"),
-    /**
-     * 陪诊服务已开始，不允许取消订单
-     */
-    ACCOMPANY_NOT_CANCEL_BY_STARTED(50003, "陪诊服务已开始，不允许取消订单"),
-    //C端提示
-    ACCOMPANY_ORDER_CANT_NOT_ORDER(50021, "无忧陪诊服务前%s天的%s时后 不允许下单"),
-
-
-    TAKE_REPORT_NOT_CANCEL_ONE(60001, "可取报告时间  前%s分钟后不允许取消订单"),
-    TAKE_REPORT_NOT_CANCEL_TWO(60002, "报告已寄出（订单完成）后 不允许取消订单"),
-    //C端提示
-    TAKE_REPORT_CANT_NOT_ORDER(60021, "代取报告服务前%s天的%s时后 不允许下单"),
-
 
     UPLOAD_FILE_NULL(70001, "请选择上传文件"),
     UPLOAD_FILE_OUT_SIZE(70002, "文件大小超出最大限制（%s）"),
@@ -90,8 +52,6 @@ public enum ResultCode {
     INVALID_WECHAT_UNBIND(90002, "未绑定openId请登陆绑定"),
 
     USER_NOT_FIND(90003, "亲，你的账号不存在，请先注册!"),
-
-    USER_ACTIVE_FAIL(10086, "护士或医生激活失败"),
 
     USER_IS_CLOSE(90005, "该用户已被锁定，暂不可登录!"),
 

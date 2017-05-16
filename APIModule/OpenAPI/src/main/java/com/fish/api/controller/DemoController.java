@@ -1,6 +1,7 @@
 package com.fish.api.controller;
 
 import com.fish.controller.CommonController;
+import com.fish.service.ICacheService;
 import com.fish.service.ICallbackListener;
 import com.fish.service.ICallbackService;
 import com.fish.service.IDemoService;
@@ -23,6 +24,9 @@ public class DemoController extends CommonController {
     @Resource
     private ICallbackService callbackService;
 
+    @Resource
+    private ICacheService cacheService;
+
     @RequestMapping(value = "sayHell", method = RequestMethod.POST)
     public void demo() {
         demoService.sayHell("zhasan");
@@ -36,6 +40,12 @@ public class DemoController extends CommonController {
                 System.out.println("callback1:" + msg);
             }
         });
+    }
+
+
+    @RequestMapping(value = "findCache", method = RequestMethod.POST)
+    public void findCache() {
+        cacheService.findCache("111111");
     }
 
 
