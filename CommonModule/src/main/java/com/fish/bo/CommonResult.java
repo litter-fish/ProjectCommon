@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @SuppressWarnings("rawtypes")
 @Data
-public class MaResult<T> implements Serializable {
+public class CommonResult<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,43 +23,43 @@ public class MaResult<T> implements Serializable {
 
     private long currentTimeMillis = System.currentTimeMillis();
 
-    public MaResult() {
+    public CommonResult() {
     }
 
-    public MaResult(String msg) {
+    public CommonResult(String msg) {
         this.code = ResultCode.ERROR.getVal();
         this.msg = msg;
     }
 
-    public MaResult(int code, String msg) {
+    public CommonResult(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public MaResult(ResultCode resultCode) {
+    public CommonResult(ResultCode resultCode) {
         this.code = resultCode.getVal();
         this.msg = resultCode.getDesc();
     }
 
-    public MaResult(T data) {
+    public CommonResult(T data) {
         this.data = data;
         this.code = ResultCode.SUCCESS.getVal();
     }
 
-    public MaResult setResultCode(ResultCode resultCode) {
+    public CommonResult setResultCode(ResultCode resultCode) {
         this.code = resultCode.getVal();
         this.msg = resultCode.getDesc();
         this.data = null;
         return this;
     }
 
-    public MaResult setMsg(String msg) {
+    public CommonResult setMsg(String msg) {
         if (StringUtils.isEmpty(msg)) return this;
         this.msg = msg;
         return this;
     }
 
-    public MaResult setErrorMsg(String msg) {
+    public CommonResult setErrorMsg(String msg) {
         if (StringUtils.isEmpty(msg)) return this;
         this.code = ResultCode.ERROR.getVal();
         this.msg = msg;
@@ -67,50 +67,50 @@ public class MaResult<T> implements Serializable {
         return this;
     }
 
-    public static MaResult<JSONObject> init() {
-        return new MaResult<JSONObject>(ResultCode.SUCCESS);
+    public static CommonResult<JSONObject> init() {
+        return new CommonResult<JSONObject>(ResultCode.SUCCESS);
     }
 
-    public static <T> MaResult<T> init(T data) {
-        return new MaResult<T>(data);
+    public static <T> CommonResult<T> init(T data) {
+        return new CommonResult<T>(data);
     }
 
     /**数据校验信息返回*/
-    public static MaResult<JSONObject> invalid(ResultCode resultCode){
-        return new MaResult<JSONObject>(resultCode);
+    public static CommonResult<JSONObject> invalid(ResultCode resultCode){
+        return new CommonResult<JSONObject>(resultCode);
     }
 
 
-    public static MaResult error(ResultCode resultCode) {
-        return new MaResult(resultCode);
+    public static CommonResult error(ResultCode resultCode) {
+        return new CommonResult(resultCode);
     }
 
-    public static MaResult error(Logger logger, Throwable e) {
+    public static CommonResult error(Logger logger, Throwable e) {
         if (logger != null) {
             logger.error("服务异常", e);
         }
-        return new MaResult(ResultCode.ERROR);
+        return new CommonResult(ResultCode.ERROR);
     }
 
-    public static MaResult error(Logger logger, ResultCode rc, Throwable e) {
+    public static CommonResult error(Logger logger, ResultCode rc, Throwable e) {
         if (logger != null) {
             logger.error("服务异常", e);
         }
-        return new MaResult(rc == null ? ResultCode.ERROR : rc);
+        return new CommonResult(rc == null ? ResultCode.ERROR : rc);
     }
 
-    public static MaResult error(Logger logger, String msg, Object... obj) {
+    public static CommonResult error(Logger logger, String msg, Object... obj) {
         if (logger != null) {
             logger.error(msg, obj);
         }
-        return new MaResult(msg);
+        return new CommonResult(msg);
     }
 
-    public static MaResult error(Logger logger, Throwable e, String msg, Object... obj) {
+    public static CommonResult error(Logger logger, Throwable e, String msg, Object... obj) {
         if (logger != null) {
             logger.error(msg, obj, e);
         }
-        return new MaResult(msg);
+        return new CommonResult(msg);
     }
 
     public boolean fail() {
