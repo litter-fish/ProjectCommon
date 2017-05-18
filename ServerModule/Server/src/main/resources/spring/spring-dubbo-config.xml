@@ -36,6 +36,17 @@
                     check="true" file="registry-cache.properties">
     </dubbo:registry>
 
+    <dubbo:registry id="serviceRegistry2"
+                    protocol="zookeeper"
+                    address="127.0.0.1:2181"
+                    client="zkclient"
+                    group="test"
+                    session="6000"
+                    register="true"
+                    subscribe="false"
+                    check="true">
+    </dubbo:registry>
+
     <!--服务-->
     <dubbo:provider id="serviceProvider"
                     application="serviceApplication"

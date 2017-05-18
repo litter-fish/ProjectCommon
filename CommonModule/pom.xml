@@ -12,6 +12,11 @@
     <name>CommonModule</name>
     <dependencies>
 
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-spring-web</artifactId>
+            <version>2.4.0</version>
+        </dependency>
     </dependencies>
     <packaging>jar</packaging>
 

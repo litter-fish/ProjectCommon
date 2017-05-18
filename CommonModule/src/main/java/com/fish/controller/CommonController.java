@@ -2,7 +2,7 @@ package com.fish.controller;
 
 import com.alibaba.dubbo.rpc.RpcException;
 import com.alibaba.fastjson.JSONObject;
-import com.fish.bo.MaResult;
+import com.fish.bo.CommonResult;
 import com.fish.constants.ResponseType;
 import com.fish.constants.ResultCode;
 import com.fish.exception.CommonException;
@@ -47,7 +47,7 @@ public abstract class CommonController {
     @SuppressWarnings("unchecked")
 	@ResponseBody
     @ExceptionHandler(Exception.class)
-    public MaResult<JSONObject> handleException(Exception e, HttpServletRequest request, HttpServletResponse response) {
+    public CommonResult<JSONObject> handleException(Exception e, HttpServletRequest request, HttpServletResponse response) {
         try {
             //获取session中存放的响应类型
             Object obj = request.getAttribute(SystemContent.FS_ATTR_SESSION_RES_TYPE);
@@ -55,13 +55,13 @@ public abstract class CommonController {
             ResponseType responseType = null == obj || !(obj instanceof ResponseType) ? ResponseType.JSON : (ResponseType) obj;
             if (e instanceof CommonException) {
                 CommonException ex = (CommonException) e;
-                return new MaResult<>(ex.getCode(), ex.getMessage());
+                return new CommonResult<>(ex.getCode(), ex.getMessage());
             }else if(e instanceof RpcException) {
-                return MaResult.error(logger, ResultCode.DUBBO_SERVICE_ERROR, e);
+                return CommonResult.error(logger, ResultCode.DUBBO_SERVICE_ERROR, e);
             }
             // JSON
             if (responseType == ResponseType.JSON) {
-                return MaResult.error(logger, e);
+                return CommonResult.error(logger, e);
             }
             String servletPath = request.getServletPath();
             servletPath = StringUtils.isBlank(servletPath) ? request.getRequestURI() : servletPath;
@@ -75,7 +75,7 @@ public abstract class CommonController {
         } catch (Exception e1) {
             LOGGER.error("处理异常失败!", e1);
         }
-        return MaResult.error(ResultCode.ERROR);
+        return CommonResult.error(ResultCode.ERROR);
     }
 
     /**

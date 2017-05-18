@@ -5,4 +5,11 @@
 		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
     <description>springMVC上下文</description>
 
+    <!--用户请求日志队列-->
+    <bean id="requestParamQueue" class="java.util.concurrent.LinkedBlockingQueue"></bean>
+
+    <bean class="com.fish.aop.ControllerAspect">
+        <property name="requestParamQueue" ref="requestParamQueue"/>
+    </bean>
+
 </beans>

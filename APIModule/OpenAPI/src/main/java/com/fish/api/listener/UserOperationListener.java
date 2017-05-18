@@ -8,35 +8,20 @@
  */
 package com.fish.api.listener;
 
+import com.fish.listener.CommonOperationListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Created by fish on 2017/5/13.
  */
 @Component
-public class UserOperationListener extends Thread {
+public class UserOperationListener extends CommonOperationListener {
 
     static final Logger LOGGER = LoggerFactory.getLogger(UserOperationListener.class);
-
-    /*@Resource
-    private LinkedBlockingQueue<JSONObject> requestParamQueue;
-
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                JSONObject jsonObj = requestParamQueue.take();
-
-                String json = jsonObj == null ? null : jsonObj.toJSONString();
-
-                LOGGER.info("json:{}", json);
-            } catch (Exception e) {
-                LOGGER.error("输出用户操作日志异常!", e);
-            }
-        }
-    }
 
     @PostConstruct
     @Override
@@ -45,5 +30,5 @@ public class UserOperationListener extends Thread {
 
         setName("用户操作日志监听线程");
         LOGGER.debug("UserOperationListener start success!");
-    }*/
+    }
 }

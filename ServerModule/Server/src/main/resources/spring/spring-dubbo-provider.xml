@@ -10,7 +10,7 @@
     <!--发布服务-->
     <description>dubbo service provider</description>
     <!-- spring aop事物管理与dubbo注解有兼容问题 -->
-    <dubbo:annotation package="com.fish.service"/>
+    <dubbo:annotation package="com.fish.service.impl"/>
 
     <bean id="callbackServiceLocal" class="com.fish.service.CallbackServiceImpl" />
     <dubbo:service interface="com.fish.service.ICallbackService" ref="callbackServiceLocal" connections="1" callbacks="1000">
