@@ -85,6 +85,12 @@ ProtocolFilterWrapper
 
 
 
+Redis 内存淘汰机制
+
+
+
+
+
 
 
 
@@ -101,46 +107,58 @@ ProtocolFilterWrapper
 
 InputStream
 
-●抽象构件(Component)角色：由InputStream扮演。这是一个抽象类，为各种子类型提供统一的接口。
-
-●具体构件(ConcreteComponent)角色：由ByteArrayInputStream、FileInputStream、PipedInputStream、StringBufferInputStream等类扮演。它们实现了抽象构件角色所规定的接口。
-
-●抽象装饰(Decorator)角色：由FilterInputStream扮演。它实现了InputStream所规定的接口。
-
-●具体装饰(ConcreteDecorator)角色：由几个类扮演，分别是BufferedInputStream、DataInputStream以及两个不常用到的类LineNumberInputStream、PushbackInputStream。
+1. 抽象构件(Component)角色：由InputStream扮演。这是一个抽象类，为各种子类型提供统一的接口。
+2. 具体构件(ConcreteComponent)角色：由ByteArrayInputStream、FileInputStream、PipedInputStream、StringBufferInputStream等类扮演。它们实现了抽象构件角色所规定的接口。
+3. 抽象装饰(Decorator)角色：由FilterInputStream扮演。它实现了InputStream所规定的接口。
+4. 具体装饰(ConcreteDecorator)角色：由几个类扮演，分别是BufferedInputStream、DataInputStream以及两个不常用到的类LineNumberInputStream、PushbackInputStream。
 
 
 OutputStream
 
-●抽象构件(Component)角色：由OutputStream扮演。这是一个抽象类，为各种子类型提供统一的接口。
-
-●具体构件(ConcreteComponent)角色：由ByteArrayOutputStream、FileOutputStream、ObjectOutputStream、PipedOutputStream等类扮演。它们实现了抽象构件角色所规定的接口。
-
-●抽象装饰(Decorator)角色：由FilterOutputStream扮演。它实现了OutputStream所规定的接口。
-
-●具体装饰(ConcreteDecorator)角色：由几个类扮演，分别是BufferedOutputStream、CheckedOutputStream、CipheOutputSteam、DataOutputStream等类扮演。
+1. 抽象构件(Component)角色：由OutputStream扮演。这是一个抽象类，为各种子类型提供统一的接口。
+2. 具体构件(ConcreteComponent)角色：由ByteArrayOutputStream、FileOutputStream、ObjectOutputStream、PipedOutputStream等类扮演。它们实现了抽象构件角色所规定的接口。
+3. 抽象装饰(Decorator)角色：由FilterOutputStream扮演。它实现了OutputStream所规定的接口。
+4. 具体装饰(ConcreteDecorator)角色：由几个类扮演，分别是BufferedOutputStream、CheckedOutputStream、CipheOutputSteam、DataOutputStream等类扮演。
 
 
 Reader
 
-●抽象构件(Component)角色：由Reader扮演。这是一个抽象类，为各种子类型提供统一的接口。
-
-●具体构件(ConcreteComponent)角色：由CharArayReader、FilterReader、InputStreamReader、PipedReader、StringReader扮演。它们实现了抽象构件角色所规定的接口。
-
-●抽象装饰(Decorator)角色：由BufferedReader 、FilterReader、InputStreamReader扮演。它实现了Reader所规定的接口。
-
-●具体装饰(ConcreteDecorator)角色：由几个类扮演，分别是LineNumberReader、PushbackReader、FileReader扮演。
+1. 抽象构件(Component)角色：由Reader扮演。这是一个抽象类，为各种子类型提供统一的接口。
+2. 具体构件(ConcreteComponent)角色：由CharArayReader、FilterReader、InputStreamReader、PipedReader、StringReader扮演。它们实现了抽象构件角色所规定的接口。
+3. 抽象装饰(Decorator)角色：由BufferedReader 、FilterReader、InputStreamReader扮演。它实现了Reader所规定的接口。
+4. 具体装饰(ConcreteDecorator)角色：由几个类扮演，分别是LineNumberReader、PushbackReader、FileReader扮演。
 
 
 Writer
 
-●抽象构件(Component)角色：由Writer扮演。这是一个抽象类，为各种子类型提供统一的接口。
+1. 抽象构件(Component)角色：由Writer扮演。这是一个抽象类，为各种子类型提供统一的接口。
+2. 具体构件(ConcreteComponent)角色：由BufferedWriter、CharArrayWriter、FilterWriter、OutputStreamWriter、PipedWriter、PrintWriter、StringWriter扮演。
+    它们实现了抽象构件角色所规定的接口。
+3. 抽象装饰(Decorator)角色：由OutputStreamWriter扮演。它实现了Writer所规定的接口。
+4. 具体装饰(ConcreteDecorator)角色：由FileWriter扮演。
 
-●具体构件(ConcreteComponent)角色：由BufferedWriter、CharArrayWriter、FilterWriter、OutputStreamWriter、PipedWriter、PrintWriter、StringWriter扮演。它们实现了抽象构件角色所规定的接口。
 
-●抽象装饰(Decorator)角色：由OutputStreamWriter扮演。它实现了Writer所规定的接口。
 
-●具体装饰(ConcreteDecorator)角色：由FileWriter扮演。
+自定义注解
+元注解：
+@Target：标记一个注解的作用范围，可以作用于
+    1. TYPE: Class, interface (including annotation type), or enum declaration
+    2. FIELD：Field declaration (includes enum constants)
+    3. METHOD：Method declaration
+    4. PARAMETER：Parameter declaration
+    5. CONSTRUCTOR：Constructor declaration
+    6. LOCAL_VARIABLE：Local variable declaration
+    7. ANNOTATION_TYPE：Annotation type declaration
+    8. PACKAGE：Package declaration
+
+@Runtention:标记注解保留的时间，可选，
+    1. SOURCE：源码阶段可见，编译阶段被忽略
+    2. CLASS：编译阶段可见
+    3. RUNTIME：运行时可见
+
+@Documented:用于生成文档
+
+@Inherited:表示被该注解标示的类，可以被继承获取
 
 
 

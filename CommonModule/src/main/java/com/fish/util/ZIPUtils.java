@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.FileChannel;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.zip.ZipInputStream;
 
@@ -40,17 +42,14 @@ public class ZIPUtils {
 
 	}
 
-	private static void zip(String zipFileName, File inputFile, String name)
-			throws Exception {
-		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(
-				zipFileName));
+	private static void zip(String zipFileName, File inputFile, String name) throws Exception {
+		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFileName));
 		zip(out, inputFile, name);
 		System.out.println("zip done");
 		out.close();
 	}
 
-	private static void zip(ZipOutputStream out, File f, String name)
-			throws Exception {
+	private static void zip(ZipOutputStream out, File f, String name) throws Exception {
 		if (f.isDirectory()) { // 判断是否为目录
 			File[] fl = f.listFiles();
 			out.putNextEntry(new org.apache.tools.zip.ZipEntry(name + "/"));
@@ -406,20 +405,19 @@ public class ZIPUtils {
 
 	// 拷贝文件
 	public static final boolean CopyFile(File in, File out) throws Exception {
+		FileChannel fis = null;
 		try {
-			FileInputStream fis = new FileInputStream(in);
-			FileOutputStream fos = new FileOutputStream(out);
-			byte[] buf = new byte[1024];
-			int i = 0;
-			while ((i = fis.read(buf)) != -1) {
-				fos.write(buf, 0, i);
-			}
-			fis.close();
-			fos.close();
+			long startTime = new Date().getTime();
+			System.out.println("start copy file :");
+			fis = new FileInputStream(in).getChannel();
+			fis.transferTo(0, fis.size(), new FileOutputStream(out).getChannel());
+			System.out.println("copy file end:" + (new Date().getTime() - startTime));
 			return true;
 		} catch (IOException ie) {
 			ie.printStackTrace();
 			return false;
+		} finally {
+			if (null != fis) fis.close();
 		}
 	}
 
@@ -433,6 +431,26 @@ public class ZIPUtils {
 		} catch (IOException ie) {
 			ie.printStackTrace();
 			return false;
+		}
+	}
+
+	public static void main(String[] args) {
+		try {
+			new Thread(){
+				@Override
+				public void run() {
+					try {
+						CopyFile("F://tools//安装包.rar", "D://CentOS-6.5-x86_64-bin-DVD.iso");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}.start();
+
+			System.out.println("main thread");
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

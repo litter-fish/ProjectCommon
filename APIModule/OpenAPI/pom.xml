@@ -74,6 +74,44 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>com.github.kongchen</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <apiSources>
+                        <apiSource>
+                            <springmvc>true</springmvc>
+                            <locations>com.fish.api.controller</locations>
+                            <schemes>http</schemes>
+                            <basePath>/</basePath>
+                            <info>
+                                <title>OpenAPI</title>
+                                <version>v1</version>
+                                <description>OpenAPI</description>
+                            </info>
+                            <templatePath>
+                                ${basedir}/src/main/webapp/apidoc/templates/strapdown.html.hbs
+                            </templatePath>
+                            <outputPath>${basedir}/src/main/webapp/document.html</outputPath>
+                            <swaggerDirectory>${basedir}/src/main/webapp/swagger-ui</swaggerDirectory>
+                        </apiSource>
+                    </apiSources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+
+
         </plugins>
         <!-- 主资源目录 -->
         <resources>

@@ -1,0 +1,53 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "OpenAPI",
+    "version" : "v1",
+    "title" : "OpenAPI"
+  },
+  "basePath" : "/",
+  "tags" : [ {
+    "name" : "demo"
+  } ],
+  "schemes" : [ "http" ],
+  "paths" : {
+    "/demo/callback" : {
+      "post" : {
+        "tags" : [ "demo" ],
+        "summary" : "callback",
+        "description" : "callback",
+        "operationId" : "callback",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/demo/sayHell" : {
+      "post" : {
+        "tags" : [ "demo" ],
+        "summary" : "sayHell",
+        "description" : "sayHell",
+        "operationId" : "demo",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
